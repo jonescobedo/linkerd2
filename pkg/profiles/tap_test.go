@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/linkerd/linkerd2/controller/api/util"
 	sp "github.com/linkerd/linkerd2/controller/gen/apis/serviceprofile/v1alpha2"
 	"github.com/linkerd/linkerd2/pkg/k8s"
 	"github.com/linkerd/linkerd2/pkg/protohttp"
 	pb "github.com/linkerd/linkerd2/viz/metrics-api/gen/viz"
+	"github.com/linkerd/linkerd2/viz/tap/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

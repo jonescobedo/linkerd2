@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/golang/protobuf/ptypes/duration"
-	"github.com/linkerd/linkerd2/controller/api/util"
 	netPb "github.com/linkerd/linkerd2/controller/gen/common/net"
 	"github.com/linkerd/linkerd2/pkg/addr"
 	pkgcmd "github.com/linkerd/linkerd2/pkg/cmd"
@@ -18,6 +17,8 @@ import (
 	"github.com/linkerd/linkerd2/pkg/protohttp"
 	"github.com/linkerd/linkerd2/pkg/tap"
 	pb "github.com/linkerd/linkerd2/viz/metrics-api/gen/viz"
+	"github.com/linkerd/linkerd2/viz/pkg/api"
+	"github.com/linkerd/linkerd2/viz/tap/util"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc/codes"
@@ -171,7 +172,7 @@ func NewCmdTap() *cobra.Command {
   # tap the test namespace, filter by request to prod namespace
   linkerd viz tap ns/test --to ns/prod`,
 		Args:      cobra.RangeArgs(1, 2),
-		ValidArgs: util.ValidTargets,
+		ValidArgs: api.ValidTargets,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if options.namespace == "" {
 				options.namespace = pkgcmd.GetDefaultNamespace(kubeconfigPath, kubeContext)

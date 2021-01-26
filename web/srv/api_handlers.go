@@ -15,7 +15,6 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"
 	"github.com/julienschmidt/httprouter"
-	coreUtil "github.com/linkerd/linkerd2/controller/api/util"
 	publicPb "github.com/linkerd/linkerd2/controller/gen/public"
 	"github.com/linkerd/linkerd2/pkg/healthcheck"
 	"github.com/linkerd/linkerd2/pkg/k8s"
@@ -23,6 +22,7 @@ import (
 	"github.com/linkerd/linkerd2/pkg/tap"
 	pb "github.com/linkerd/linkerd2/viz/metrics-api/gen/viz"
 	vizUtil "github.com/linkerd/linkerd2/viz/metrics-api/util"
+	"github.com/linkerd/linkerd2/viz/tap/util"
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/yaml"
@@ -257,14 +257,14 @@ func (h *handler) handleAPITap(w http.ResponseWriter, req *http.Request, p httpr
 		return
 	}
 
-	var requestParams coreUtil.TapRequestParams
+	var requestParams util.TapRequestParams
 	err = json.Unmarshal(message, &requestParams)
 	if err != nil {
 		websocketError(ws, websocket.CloseInternalServerErr, err)
 		return
 	}
 
-	tapReq, err := coreUtil.BuildTapByResourceRequest(requestParams)
+	tapReq, err := util.BuildTapByResourceRequest(requestParams)
 	if err != nil {
 		websocketError(ws, websocket.CloseInternalServerErr, err)
 		return

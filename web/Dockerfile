@@ -40,6 +40,7 @@ COPY web/srv web/srv
 COPY controller controller
 COPY viz/metrics-api viz/metrics-api
 COPY viz/pkg viz/pkg
+COPY viz/tap/util viz/tap/util
 COPY pkg pkg
 ARG TARGETARCH
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -mod=readonly -o web/web -ldflags "-s -w" ./web

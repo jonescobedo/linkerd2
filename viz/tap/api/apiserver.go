@@ -1,4 +1,4 @@
-package tap
+package api
 
 import (
 	"context"
@@ -12,7 +12,6 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/linkerd/linkerd2/controller/k8s"
-	k8sutils "github.com/linkerd/linkerd2/pkg/k8s"
 	pkgk8s "github.com/linkerd/linkerd2/pkg/k8s"
 	"github.com/linkerd/linkerd2/pkg/prometheus"
 	pkgTls "github.com/linkerd/linkerd2/pkg/tls"
@@ -166,13 +165,13 @@ func apiServerAuth(ctx context.Context, k8sAPI *k8s.API) (string, []string, stri
 
 	cm, err := k8sAPI.Client.CoreV1().
 		ConfigMaps(metav1.NamespaceSystem).
-		Get(ctx, k8sutils.ExtensionAPIServerAuthenticationConfigMapName, metav1.GetOptions{})
+		Get(ctx, pkgk8s.ExtensionAPIServerAuthenticationConfigMapName, metav1.GetOptions{})
 
 	if err != nil {
-		return "", nil, "", "", fmt.Errorf("failed to load [%s] config: %s", k8sutils.ExtensionAPIServerAuthenticationConfigMapName, err)
+		return "", nil, "", "", fmt.Errorf("failed to load [%s] config: %s", pkgk8s.ExtensionAPIServerAuthenticationConfigMapName, err)
 	}
 
-	clientCAPem, ok := cm.Data[k8sutils.ExtensionAPIServerAuthenticationRequestHeaderClientCAFileKey]
+	clientCAPem, ok := cm.Data[pkgk8s.ExtensionAPIServerAuthenticationRequestHeaderClientCAFileKey]
 
 	if !ok {
 		return "", nil, "", "", fmt.Errorf("no client CA cert available for apiextension-server")

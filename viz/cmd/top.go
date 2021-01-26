@@ -11,14 +11,15 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/linkerd/linkerd2/controller/api/util"
 	"github.com/linkerd/linkerd2/pkg/addr"
 	pkgcmd "github.com/linkerd/linkerd2/pkg/cmd"
 	"github.com/linkerd/linkerd2/pkg/k8s"
 	"github.com/linkerd/linkerd2/pkg/protohttp"
 	"github.com/linkerd/linkerd2/pkg/tap"
-	api "github.com/linkerd/linkerd2/viz/metrics-api"
+	metricsAPI "github.com/linkerd/linkerd2/viz/metrics-api"
 	pb "github.com/linkerd/linkerd2/viz/metrics-api/gen/viz"
+	"github.com/linkerd/linkerd2/viz/pkg/api"
+	"github.com/linkerd/linkerd2/viz/tap/util"
 	runewidth "github.com/mattn/go-runewidth"
 	termbox "github.com/nsf/termbox-go"
 	log "github.com/sirupsen/logrus"
@@ -318,7 +319,7 @@ func NewCmdTop() *cobra.Command {
   # display traffic for the web-dlbvj pod in the default namespace
   linkerd viz top pod/web-dlbvj`,
 		Args:      cobra.RangeArgs(1, 2),
-		ValidArgs: util.ValidTargets,
+		ValidArgs: api.ValidTargets,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if options.namespace == "" {
 				options.namespace = pkgcmd.GetDefaultNamespace(kubeconfigPath, kubeContext)
@@ -544,7 +545,7 @@ func newRow(req topRequest) (tableRow, error) {
 	path := req.reqInit.GetPath()
 	route := req.event.GetRouteMeta().GetLabels()["route"]
 	if route == "" {
-		route = api.DefaultRouteName
+		route = metricsAPI.DefaultRouteName
 	}
 	method := req.reqInit.GetMethod().GetRegistered().String()
 	source := stripPort(addr.PublicAddressToString(req.event.GetSource()))
